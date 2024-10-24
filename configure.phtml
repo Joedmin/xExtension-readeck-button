@@ -1,66 +1,68 @@
 <?php
-$instance_api_url = FreshRSS_Context::$user_conf->instance_api_url;
-$api_token = FreshRSS_Context::$user_conf->api_token;
-$username = FreshRSS_Context::$user_conf->username;
-$keyboard_shortcut = FreshRSS_Context::$user_conf->keyboard_shortcut;
+
+declare(strict_types=1);
+/** @var ReadeckButtonExtension $this */
+$instance_url = FreshRSS_Context::userConf()->attributeString('instance_api_url');
+$api_token = FreshRSS_Context::userConf()->attributeString('api_token');
+$username = FreshRSS_Context::userConf()->attributeString('username');
+$keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('keyboard_shortcut');
 ?>
 
-<form action="<?php echo _url('extension', 'configure', 'e', urlencode($this->getName())); ?>" method="post">
-  <input type="hidden" name="_csrf" value="<?php echo FreshRSS_Auth::csrfToken(); ?>" />
+<form action="<?= _url('extension', 'configure', 'e', urlencode($this->getName())); ?>" method="post">
+  <input type="hidden" name="_csrf" value="<?= FreshRSS_Auth::csrfToken(); ?>" />
   <div class="form-group">
-    <label class="group-name" for="keyboard_shortcut"><?php echo _t('ext.readeckButton.configure.keyboard_shortcut'); ?></label>
+    <label class="group-name" for="keyboard_shortcut"><?= _t('ext.readeckButton.configure.keyboard_shortcut'); ?></label>
     <div class="group-controls">
-      <input type="text" name="keyboard_shortcut" id="keyboard_shortcut" maxlength="1" value="<?php echo $keyboard_shortcut; ?>">
+      <input type="text" name="keyboard_shortcut" id="keyboard_shortcut" maxlength="1" value="<?= $keyboard_shortcut; ?>">
     </div>
   </div>
 
   <div class="form-group form-actions">
     <div class="group-controls">
-      <button type="submit" class="btn btn-important"><?php echo _t('gen.action.submit'); ?></button>
+      <button type="submit" class="btn btn-important"><?= _t('gen.action.submit'); ?></button>
     </div>
   </div>
 </form>
 
-<?php if ($this->isEnabled() && (empty($username) || empty($api_token) || empty($instance_api_url))) : ?>
-  <form action="<?php echo _url('readeckButton', 'requestAccess'); ?>" method="post">
-    <input type="hidden" name="_csrf" value="<?php echo FreshRSS_Auth::csrfToken(); ?>" />
+<?php if ($this->isEnabled() && (empty($username) || empty($api_token) || empty($instance_url))) : ?>
+  <form action="<?= _url('readeckButton', 'requestAccess'); ?>" method="post">
+    <input type="hidden" name="_csrf" value="<?= FreshRSS_Auth::csrfToken(); ?>" />
     <div class="form-group">
-      <label class="group-name" for="instance_api_url"><?php echo _t('ext.readeckButton.configure.instance_api_url'); ?></label>
+      <label class="group-name" for="instance_api_url"><?= _t('ext.readeckButton.configure.instance_api_url'); ?></label>
       <div class="group-controls">
-        <!-- TODO: regex -->
-        <input type="text" name="instance_api_url" id="instance_api_url" pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)\/api\/?" value="<?php echo $instance_api_url; ?>" required>
+        <input type="url" name="instance_api_url" id="instance_api_url" title="Please enter a valid URL starting with http:// or https://" value="<?= $instance_url; ?>" required>
       </div>
-      <label class="group-name" for="api_token"><?php echo _t('ext.readeckButton.configure.api_token'); ?></label>
+      <label class="group-name" for="api_token"><?= _t('ext.readeckButton.configure.api_token'); ?></label>
       <div class="group-controls">
-        <input type="text" name="api_token" id="api_token" value="<?php echo $api_token; ?>" required>
+        <input type="text" name="api_token" id="api_token" value="<?= $api_token; ?>" required>
       </div>
     </div>
 
     <div class="alert alert-warn">
-      <?php echo _t('ext.readeckButton.configure.api_token_description'); ?>
+      <?= _t('ext.readeckButton.configure.api_token_description'); ?>
     </div>
 
     <div class="form-group form-actions">
       <div class="group-controls">
-        <button type="submit" class="btn btn-important"><?php echo _t('ext.readeckButton.configure.connect_to_readeck'); ?></button>
+        <button type="submit" class="btn btn-important"><?= _t('ext.readeckButton.configure.connect_to_readeck'); ?></button>
       </div>
     </div>
   </form>
 <?php elseif (!$this->isEnabled()) : ?>
   <p class="alert alert-error">
-    <?php echo _t('ext.readeckButton.configure.extension_disabled'); ?>
+    <?= _t('ext.readeckButton.configure.extension_disabled'); ?>
   </p>
 <?php endif ?>
 
-<?php if (!empty($username) && !empty($api_token) && !empty($instance_api_url)) : ?>
+<?php if (!empty($username) && !empty($api_token) && !empty($instance_url)) : ?>
   <p class="alert alert-success">
-    <?php echo _t('ext.readeckButton.configure.connected_to_readeck', $username, $api_token, $instance_api_url); ?>
+    <?= _t('ext.readeckButton.configure.connected_to_readeck', $username, $api_token, $instance_url); ?>
   </p>
-  <form action="<?php echo _url('readeckButton', 'revokeAccess'); ?>" method="post">
-    <input type="hidden" name="_csrf" value="<?php echo FreshRSS_Auth::csrfToken(); ?>" />
+  <form action="<?= _url('readeckButton', 'revokeAccess'); ?>" method="post">
+    <input type="hidden" name="_csrf" value="<?= FreshRSS_Auth::csrfToken(); ?>" />
     <div class="form-group form-actions">
       <div class="group-controls">
-        <button type="submit" class="btn btn-important"><?php echo _t('ext.readeckButton.configure.revoke_access'); ?></button>
+        <button type="submit" class="btn btn-important"><?= _t('ext.readeckButton.configure.revoke_access'); ?></button>
       </div>
     </div>
   </form>

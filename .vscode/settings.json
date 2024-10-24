@@ -1,0 +1,4 @@
+{
+  "intelephense.environment.includePaths": ["../FreshRSS"],
+  "cSpell.enabled": false
+}
