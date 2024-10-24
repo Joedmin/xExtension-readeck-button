@@ -1,0 +1,44 @@
+parameters:
+	level: 6 # TODO: Increase to 9
+	fileExtensions:
+		- php
+		- phtml
+	paths:
+		- ../FreshRSS
+		- .
+	excludePaths:
+		analyse:
+			- ../FreshRSS
+			- vendor/
+			- fresh_rss_data/
+		analyseAndScan:
+			- .github/
+			- .vscode/
+			- .git/
+			- node_modules/
+	checkMissingOverrideMethodAttribute: true
+	reportMaybesInPropertyPhpDocTypes: false
+	treatPhpDocTypesAsCertain: false
+	strictRules:
+		allRules: false
+		booleansInConditions: true
+		closureUsesThis: true
+		disallowedConstructs: false
+		disallowedLooseComparison: false
+		matchingInheritedMethodNames: true
+		noVariableVariables: true
+		numericOperandsInArithmeticOperators: true
+		overwriteVariablesWithLoop: true
+		requireParentConstructorCall: true
+		strictCalls: true
+		switchConditionsMatchingType: true
+		uselessCast: true
+	exceptions:
+		check:
+			missingCheckedExceptionInThrows: false	# TODO pass
+			tooWideThrowType: true
+		implicitThrows: false
+		checkedExceptionClasses:
+			- 'Minz_Exception'
+includes:
+	- vendor/phpstan/phpstan-strict-rules/rules.neon

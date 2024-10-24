@@ -22,7 +22,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
       )
     ));
 
-    $this->view->_layout(false);
+    $this->view->_layout(null);
     $this->view->_path('readeckButton/vars.js');
 
     header('Content-Type: application/javascript; charset=utf-8');

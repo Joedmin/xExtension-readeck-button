@@ -2,12 +2,8 @@ services:
   freshrss:
     image: freshrss/freshrss:latest
     container_name: freshrss
-    restart: unless-stopped
-    logging:
-      options:
-        max-size: 10m
     volumes:
       - ./fresh_rss_data:/var/www/FreshRSS/data
-      - ./:/var/www/FreshRSS/extensions/freshrss-readeck-button
+      - ./:/var/www/FreshRSS/extensions/freshrss-readeck-button:ro
     ports:
       - 8080:80
