@@ -1,60 +1,60 @@
 .notification.readeck_button_good,
 .notification.readeck_button_bad {
-    position: fixed;
-    color: #fff;
-    left: 20%;
-    right: 20%;
+  position: fixed;
+  color: #fff;
+  left: 20%;
+  right: 20%;
 }
 
 .notification.readeck_button_bad {
-    background: #e74c3c;
+  background: #e74c3c;
 }
 
 .notification.readeck_button_good {
-    background: #1abc9c;
+  background: #1abc9c;
 }
 
 input#api_token {
-    width: 300px;
+  width: 300px;
 }
 
 input#keyboard_shortcut {
-    width: 30px;
+  width: 30px;
 }
 
 .listedNumbers {
-    list-style-type: decimal;
+  list-style-type: decimal;
 }
 
-.disabled {
-    display: none !important;
+.item-element.readeckButton .disabled {
+  display: none !important;
 }
 
 .lds-dual-ring {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    vertical-align: middle;
-    line-height: 12px;
-    margin: -4px 0 0 -2px;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: middle;
+  line-height: 12px;
+  margin: -4px 0 0 -2px;
 }
 
 .lds-dual-ring:after {
-    content: " ";
-    display: block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid #e74c3c;
-    border-color: #e74c3c transparent #e74c3c transparent;
-    animation: lds-dual-ring 1.2s linear infinite;
+  content: " ";
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #e74c3c;
+  border-color: #e74c3c transparent #e74c3c transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
 }
 
 @keyframes lds-dual-ring {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
