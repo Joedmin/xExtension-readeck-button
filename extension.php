@@ -19,10 +19,9 @@ class ReadeckButtonExtension extends Minz_Extension
   public function handleConfigureAction()
   {
     $this->registerTranslates();
-
     if (Minz_Request::isPost()) {
       $keyboard_shortcut = Minz_Request::paramString('keyboard_shortcut');
-      FreshRSS_Context::userConf()->_attribute('readeck_keyboard_shortcut', $keyboard_shortcut);
+      FreshRSS_Context::userConf()->_attribute('readeck_shortcut', $keyboard_shortcut);
       FreshRSS_Context::userConf()->save();
     }
   }

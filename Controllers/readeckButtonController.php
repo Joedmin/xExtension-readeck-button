@@ -9,8 +9,8 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
   {
     $extension = Minz_ExtensionManager::findExtension('Readeck Button');
     $this->view->readeck_button_vars = json_encode(array(
-      'instance_api_url' => FreshRSS_Context::userConf()->attributeString('instance_api_url'),
-      'keyboard_shortcut' => FreshRSS_Context::userConf()->attributeString('keyboard_shortcut'),
+      'instance_url' => FreshRSS_Context::userConf()->attributeString('readeck_instance_url'),
+      'keyboard_shortcut' => FreshRSS_Context::userConf()->attributeString('readeck_shortcut'),
       'icons' => array(
         'added_to_readeck' => $extension->getFileUrl('added_to_readeck.svg', 'svg'),
       ),
@@ -30,22 +30,24 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
   public function requestAccessAction(): void
   {
+    $instance_url = Minz_Request::paramString('instance_url');
     $api_token = Minz_Request::paramString('api_token');
-    $instance_api_url = Minz_Request::paramString('instance_api_url');
-    FreshRSS_Context::userConf()->_attribute('instance_api_url', $instance_api_url);
-    FreshRSS_Context::userConf()->_attribute('api_token', $api_token);
+
+    // TODO: handle trailing slash in url
+
+
+    FreshRSS_Context::userConf()->_attribute('readeck_instance_url', $instance_url);
+    FreshRSS_Context::userConf()->_attribute('readeck_api_token', $api_token);
     FreshRSS_Context::userConf()->save();
 
-    $result = $this->curlGetRequest($instance_api_url . '/profile', $api_token);
+    $result = $this->curlGetRequest($instance_url . '/api/profile', $api_token);
     if ($result['status'] == 200) {
-      FreshRSS_Context::userConf()->_attribute('username', $result['response']->user->username);
-      FreshRSS_Context::userConf()->_attribute('instance_api_url', $instance_api_url);
-      FreshRSS_Context::userConf()->_attribute('api_token', $api_token);
+      FreshRSS_Context::userConf()->_attribute('readeck_username', $result['response']->user->username);
       FreshRSS_Context::userConf()->save();
 
       $url_redirect = array('c' => 'extension', 'a' => 'configure', 'params' => array('e' => 'Readeck Button'));
       Minz_Request::good(_t('ext.readeckButton.notifications.authorized_success'), $url_redirect);
-      exit();
+      return;
     }
 
     $url_redirect = array('c' => 'extension', 'a' => 'configure', 'params' => array('e' => 'Readeck Button'));
@@ -54,13 +56,62 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
   public function revokeAccessAction(): void
   {
-    FreshRSS_Context::userConf()->_attribute('instance_api_url');
-    FreshRSS_Context::userConf()->_attribute('api_token');
-    FreshRSS_Context::userConf()->_attribute('username');
+    // TODO: remove in the next 2 versions
+    $this->migrateConfigvariables();
+
+    FreshRSS_Context::userConf()->_attribute('readeck_instance_url');
+    FreshRSS_Context::userConf()->_attribute('readeck_api_token');
+    FreshRSS_Context::userConf()->_attribute('readeck_username');
     FreshRSS_Context::userConf()->save();
 
     $url_redirect = array('c' => 'extension', 'a' => 'configure', 'params' => array('e' => 'Readeck Button'));
     Minz_Request::forward($url_redirect);
+  }
+
+  // TODO: remove this method after the next 2 versions - all users should've already been migrated, hopefuly
+  private function migrateConfigvariables(): void
+  {
+    $username = FreshRSS_Context::userConf()->attributeString('username');
+    $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('keyboard_shortcut');
+    $instance_url = FreshRSS_Context::userConf()->attributeString('instance_api_url');
+    $api_token = FreshRSS_Context::userConf()->attributeString('api_token');
+
+    if (!isset($username) && !isset($instance_url) && !isset($api_token))
+    {
+      // Already migrated.
+      return;
+    }
+
+    // Migrate to base url
+    if (substr($instance_url, -1) == '/')
+    {
+      $instance_url = substr($instance_url, 0, -1);
+    }
+    if (substr($instance_url, -4) == '/api')
+    {
+      $instance_url = substr($instance_url, 0, -4);
+    }
+
+    // Save them with preix
+    FreshRSS_Context::userConf()->_attribute('readeck_username', $username);
+    FreshRSS_Context::userConf()->_attribute('readeck_instance_url', $instance_url);
+    FreshRSS_Context::userConf()->_attribute('readeck_api_token', $api_token);
+
+    // Remove old variables
+    FreshRSS_Context::userConf()->_attribute('username');
+    FreshRSS_Context::userConf()->_attribute('instance_api_url');
+    FreshRSS_Context::userConf()->_attribute('api_token');
+
+    if (isset($keyboard_shortcut)) {
+      FreshRSS_Context::userConf()->_attribute('readeck_shortcut', $keyboard_shortcut);
+      FreshRSS_Context::userConf()->_attribute('keyboard_shortcut');
+    }
+    else {
+      // Does not matter, user might have not even set it
+    }
+
+    // Migration complete
+    FreshRSS_Context::userConf()->save();
   }
 
   public function addAction(): void
@@ -80,10 +131,13 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
       'url' => $entry->link(),
     );
 
-    $api_token = FreshRSS_Context::userConf()->attributeString('api_token');
-    $instance_api_url = FreshRSS_Context::userConf()->attributeString('instance_api_url');
+    // TODO: remove in the next 2 versions
+    $this->migrateConfigvariables();
 
-    $result = $this->curlPostRequest($instance_api_url . '/bookmarks', $post_data, $api_token);
+    $api_token = FreshRSS_Context::userConf()->attributeString('readeck_api_token');
+    $instance_url = FreshRSS_Context::userConf()->attributeString('readeck_instance_url');
+
+    $result = $this->curlPostRequest($instance_url . '/api/bookmarks', $post_data, $api_token);
     $result['response'] = array('title' => $entry->title());
 
     echo json_encode($result);

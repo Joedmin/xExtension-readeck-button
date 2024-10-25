@@ -12,7 +12,7 @@ return array(
       <span>Details can be found on <a href="https://github.com/Joedmin/freshrss-readeck-button" target="_blank">GitHub</a>!',
       'connect_to_readeck' => 'Connect to Readeck',
       'username' => 'Username',
-      'instance_api_url' => 'Readeck instance API url',
+      'instance_url' => 'Readeck instance url',
       'keyboard_shortcut' => 'Keyboard shortcut',
       'extension_disabled' => 'You need to enable the extension before you can connect to Readeck!',
       'connected_to_readeck' => 'You are connected to Readeck with the account <b>%s</b> using the access token <b>%s</b> at <b>%s</b>.',
