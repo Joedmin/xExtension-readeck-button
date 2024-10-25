@@ -33,14 +33,17 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     $instance_url = Minz_Request::paramString('instance_url');
     $api_token = Minz_Request::paramString('api_token');
 
-    // TODO: handle trailing slash in url
-
+    // Handle leading slash
+    if (substr($instance_url, -1) == '/')
+    {
+      $instance_url = substr($instance_url, 0, -1);
+    }
 
     FreshRSS_Context::userConf()->_attribute('readeck_instance_url', $instance_url);
     FreshRSS_Context::userConf()->_attribute('readeck_api_token', $api_token);
     FreshRSS_Context::userConf()->save();
 
-    $result = $this->curlGetRequest($instance_url . '/api/profile', $api_token);
+    $result = $this->curlGetRequest('/profile');
     if ($result['status'] == 200) {
       FreshRSS_Context::userConf()->_attribute('readeck_username', $result['response']->user->username);
       FreshRSS_Context::userConf()->save();
@@ -134,37 +137,31 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     // TODO: remove in the next 2 versions
     $this->migrateConfigvariables();
 
-    $api_token = FreshRSS_Context::userConf()->attributeString('readeck_api_token');
-    $instance_url = FreshRSS_Context::userConf()->attributeString('readeck_instance_url');
-
-    $result = $this->curlPostRequest($instance_url . '/api/bookmarks', $post_data, $api_token);
+    $result = $this->curlPostRequest('/bookmarks', $post_data);
     $result['response'] = array('title' => $entry->title());
 
     echo json_encode($result);
   }
 
   /**
-   * @param string $api_token
    * @return array<string>
    */
-  private function getRequestHeaders(string $api_token): array
+  private function getRequestHeaders(): array
   {
+    $api_token = FreshRSS_Context::userConf()->attributeString('readeck_api_token');
     return array(
       'Content-Type: application/json; charset=UTF-8',
       'X-Accept: application/json',
-      "Authorization: Bearer " . $api_token
+      "Authorization: Bearer " . $api_token,
     );
   }
 
   /**
-   * @param string $url
-   * @param string $api_token
    * @return \CurlHandle
    */
-  private function getCurlBase(string $url, string $api_token): \CurlHandle
+  private function getCurlBase(string $url): \CurlHandle
   {
-    $headers = $this->getRequestHeaders($api_token);
-
+    $headers = $this->getRequestHeaders();
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
@@ -174,17 +171,16 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
   }
 
   /**
-   * @param string $url
-   * @param string $api_token
    * @return array<string,mixed>
    */
-  private function curlGetRequest(string $url, string $api_token): array
+  private function curlGetRequest(string $endpoint): array
   {
-    $curl = $this->getCurlBase($url, $api_token);
+    $instance_url = FreshRSS_Context::userConf()->attributeString('readeck_instance_url');
+    $curl = $this->getCurlBase($instance_url . "/api/" . $endpoint);
+
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
 
     $response = curl_exec($curl);
-
     $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
     $response_header = substr($response, 0, $header_size);
     $response_body = substr($response, $header_size);
@@ -198,14 +194,14 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
   }
 
   /**
-   * @param string $url
    * @param array<string,mixed> $post_data
-   * @param string $api_token
    * @return array<string,mixed>
    */
-  private function curlPostRequest(string $url, array $post_data, string $api_token): array
+  private function curlPostRequest(string $endpoint, array $post_data): array
   {
-    $curl = $this->getCurlBase($url, $api_token);
+    $instance_url = FreshRSS_Context::userConf()->attributeString('readeck_instance_url');
+    $curl = $this->getCurlBase($instance_url . "/api/" . $endpoint);
+    curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post_data));
 
@@ -219,12 +215,13 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     return array(
       'response' => json_decode($response_body),
       'status' => curl_getinfo($curl, CURLINFO_HTTP_CODE),
-      'errorCode' => isset($response_headers['x-error-code']) ? intval($response_headers['x-error-code']) : curl_getinfo($curl, CURLINFO_HTTP_CODE)
+      'errorCode' => isset($response_headers['x-error-code'])
+        ? intval($response_headers['x-error-code'])
+        : curl_getinfo($curl, CURLINFO_HTTP_CODE)
     );
   }
 
    /**
-   * @param string $header
    * @return array<string,string>
    */
   private function httpHeaderToArray(string $header): array
