@@ -176,7 +176,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
   private function curlGetRequest(string $endpoint): array
   {
     $instance_url = FreshRSS_Context::userConf()->attributeString('readeck_instance_url');
-    $curl = $this->getCurlBase($instance_url . "/api/" . $endpoint);
+    $curl = $this->getCurlBase($instance_url . "/api" . $endpoint);
 
     curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
 
@@ -200,7 +200,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
   private function curlPostRequest(string $endpoint, array $post_data): array
   {
     $instance_url = FreshRSS_Context::userConf()->attributeString('readeck_instance_url');
-    $curl = $this->getCurlBase($instance_url . "/api/" . $endpoint);
+    $curl = $this->getCurlBase($instance_url . "/api" . $endpoint);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post_data));
