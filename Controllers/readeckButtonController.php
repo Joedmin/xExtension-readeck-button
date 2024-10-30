@@ -74,14 +74,21 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
   // TODO: remove this method after the next 2 versions - all users should've already been migrated, hopefuly
   private function migrateConfigvariables(): void
   {
+    $migrated = FreshRSS_Context::userConf()->attributeBool('readeck_migrated');
+    if ($migrated) {
+      // Already migrated.
+      return;
+    }
+
     $username = FreshRSS_Context::userConf()->attributeString('username');
     $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('keyboard_shortcut');
     $instance_url = FreshRSS_Context::userConf()->attributeString('instance_api_url');
     $api_token = FreshRSS_Context::userConf()->attributeString('api_token');
 
-    if (!isset($username) && !isset($instance_url) && !isset($api_token))
-    {
+    if (!isset($username) && !isset($instance_url) && !isset($api_token)) {
       // Already migrated.
+      FreshRSS_Context::userConf()->_attribute('readeck_migrated', true);
+      FreshRSS_Context::userConf()->save();
       return;
     }
 
@@ -114,6 +121,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     }
 
     // Migration complete
+    FreshRSS_Context::userConf()->_attribute('readeck_migrated', true);
     FreshRSS_Context::userConf()->save();
   }
 
