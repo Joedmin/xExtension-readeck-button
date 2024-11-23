@@ -10,7 +10,9 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     $extension = Minz_ExtensionManager::findExtension('Readeck Button');
     $this->view->readeck_button_vars = json_encode(array(
       'instance_url' => FreshRSS_Context::userConf()->attributeString('readeck_instance_url'),
-      'keyboard_shortcut' => FreshRSS_Context::userConf()->attributeString('readeck_shortcut'),
+      'keyboard_shortcut' => FreshRSS_Context::userConf()->hasParam("readeck_shortcut")
+        ? FreshRSS_Context::userConf()->attributeString('readeck_shortcut')
+        : '',
       'icons' => array(
         'added_to_readeck' => $extension->getFileUrl('added_to_readeck.svg', 'svg'),
       ),
@@ -59,7 +61,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
   public function revokeAccessAction(): void
   {
-    // TODO: remove in the next 2 versions
+    // TODO: remove in the next version
     $this->migrateConfigvariables();
 
     FreshRSS_Context::userConf()->_attribute('readeck_instance_url');
@@ -71,10 +73,10 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     Minz_Request::forward($url_redirect);
   }
 
-  // TODO: remove this method after the next 2 versions - all users should've already been migrated, hopefuly
+  // TODO: remove this method after the next version - all users should've already been migrated, hopefuly
   private function migrateConfigvariables(): void
   {
-    $migrated = FreshRSS_Context::userConf()->attributeBool('readeck_migrated');
+    $migrated = FreshRSS_Context::userConf()->hasParam('readeck_migrated');
     if ($migrated) {
       // Already migrated.
       return;
