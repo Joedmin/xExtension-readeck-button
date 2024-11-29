@@ -4,7 +4,7 @@ A [FreshRSS](https://freshrss.org/) extension which adds a [Readeck](https://rea
 With this extension you can simply press the Readeck Button next to an article or a custom keyboard shortcut to share it with Readeck. Everything else happens in the background while you can continue reading articles without any further interruptions.
 
 ## Download and setup
-1. Download the [latest release](https://github.com/christian-putzke/freshrss-readeck-button/releases)
+1. Download the [latest release](https://github.com/Joedmin/xExtension-readeck-button/releases)
 2. Extract and upload it to the `./extensions` folder of your FreshRSS installation
 3. Go to `<readeck_intance_url>/profile/tokens`
 4. Create a new API token with at least the `Bookmarks : Write Only` permission
