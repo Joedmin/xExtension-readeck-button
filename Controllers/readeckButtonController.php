@@ -68,7 +68,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     FreshRSS_Context::userConf()->save();
 
     $url_redirect = array('c' => 'extension', 'a' => 'configure', 'params' => array('e' => 'Readeck Button'));
-    Minz_Request::forward($url_redirect);
+    Minz_Request::good(_t('ext.readeckButton.notifications.authorization_revoked'), $url_redirect);
   }
 
   public function addAction(): void

@@ -28,6 +28,7 @@ return array(
       'relog_required' => 'Relog to Readeck is required! Please log out and log back in in the extension settings.',
       'request_access_failed' => 'Access request failed! Readeck API error code: %s',
       'article_not_found' => 'Can\'t find article!',
+      'authorization_revoked' => 'Authorization successfully revoked!'
     )
   ),
 );
