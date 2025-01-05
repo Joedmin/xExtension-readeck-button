@@ -23,12 +23,15 @@
 
 		$extension = Minz_ExtensionManager::findExtension('Readeck Button');
 		$readeck_button_icon = $extension->getFileUrl('add_to_readeck.svg', 'svg');
-		?>
-		<li class="item manage"><?php
-			$arUrl = array('c' => 'readeckButton', 'a' => 'add', 'params' => array('id' => $this->entry->id()));
-			?><a class="item-element readeckButton" href="<?php echo Minz_Url::display($arUrl); ?>"><div class="lds-dual-ring disabled"></div><img class="icon" src="<?= $readeck_button_icon ?>" /></a><?php
-			?></li>
-		<?php
+
+		if ($extension->isConfigured()) {
+			?>
+			<li class="item manage"><?php
+				$arUrl = array('c' => 'readeckButton', 'a' => 'add', 'params' => array('id' => $this->entry->id()));
+				?><a class="item-element readeckButton" href="<?php echo Minz_Url::display($arUrl); ?>"><div class="lds-dual-ring disabled"></div><img class="icon" src="<?= $readeck_button_icon ?>" /></a><?php
+				?></li>
+			<?php
+		}
 
 		if ($bottomline_favorite) {
 			?><li class="item manage"><?php
