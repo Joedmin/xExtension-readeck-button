@@ -65,8 +65,8 @@ function requestFailed(activeId, readeckButtonImg, loadingAnimation)
 {
   delete pending_entries[activeId];
 
-  readeckButtonImg.classList.remove("disabled");
-  loadingAnimation.classList.add("disabled");
+  readeckButtonImg.classList.remove("rb_disabled");
+  loadingAnimation.classList.add("rb_disabled");
 
   badAjax(this.status == 403);
 }
@@ -80,10 +80,10 @@ async function add_to_readeck(readeckButton, active)
   }
 
   let readeckButtonImg = readeckButton.querySelector("img");
-  readeckButtonImg.classList.add("disabled");
+  readeckButtonImg.classList.add("rb_disabled");
 
-  let loadingAnimation = readeckButton.querySelector(".lds-dual-ring");
-  loadingAnimation.classList.remove("disabled");
+  let loadingAnimation = readeckButton.querySelector(".rb_lds-dual-ring");
+  loadingAnimation.classList.remove("rb_disabled");
 
   let activeId = active.getAttribute('id');
   if (pending_entries[activeId])
@@ -108,8 +108,8 @@ async function add_to_readeck(readeckButton, active)
     {
       delete pending_entries[activeId];
 
-      readeckButtonImg.classList.remove("disabled");
-      loadingAnimation.classList.add("disabled");
+      readeckButtonImg.classList.remove("rb_disabled");
+      loadingAnimation.classList.add("rb_disabled");
 
       if (!response.ok)
       {
@@ -155,5 +155,9 @@ async function add_to_readeck(readeckButton, active)
           requestFailed(activeId, readeckButtonImg, loadingAnimation);
           break;
       }
+    })
+    .catch(() =>
+    {
+      requestFailed(activeId, readeckButtonImg, loadingAnimation);
     });
 }
