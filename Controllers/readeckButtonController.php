@@ -33,8 +33,8 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
   public function requestAccessAction(): void
   {
-    $instance_url = Minz_Request::paramString('instance_url');
-    $api_token = Minz_Request::paramString('api_token');
+    $instance_url = Minz_Request::paramString('readeck_instance_url');
+    $api_token = Minz_Request::paramString('readeck_api_token');
 
     // Handle leading slash
     if (substr($instance_url, -1) == '/')

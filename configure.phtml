@@ -11,9 +11,9 @@ $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('readeck_shor
 <form action="<?= _url('extension', 'configure', 'e', urlencode($this->getName())); ?>" method="post">
   <input type="hidden" name="_csrf" value="<?= FreshRSS_Auth::csrfToken(); ?>" />
   <div class="form-group">
-    <label class="group-name" for="keyboard_shortcut"><?= _t('ext.readeckButton.configure.keyboard_shortcut'); ?></label>
+    <label class="group-name" for="readeck_shortcut"><?= _t('ext.readeckButton.configure.keyboard_shortcut'); ?></label>
     <div class="group-controls">
-      <input type="text" name="keyboard_shortcut" id="keyboard_shortcut" maxlength="1" value="<?= $keyboard_shortcut; ?>">
+      <input type="text" name="readeck_shortcut" id="readeck_shortcut" maxlength="1" value="<?= $keyboard_shortcut; ?>">
     </div>
   </div>
 
@@ -28,13 +28,13 @@ $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('readeck_shor
   <form action="<?= _url('readeckButton', 'requestAccess'); ?>" method="post">
     <input type="hidden" name="_csrf" value="<?= FreshRSS_Auth::csrfToken(); ?>" />
     <div class="form-group">
-      <label class="group-name" for="instance_url"><?= _t('ext.readeckButton.configure.instance_url'); ?></label>
+      <label class="group-name" for="readeck_instance_url"><?= _t('ext.readeckButton.configure.instance_url'); ?></label>
       <div class="group-controls">
-        <input type="url" name="instance_url" id="instance_url" title="Please enter a valid URL starting with http:// or https://" value="<?= $instance_url; ?>" required>
+        <input type="url" name="readeck_instance_url" id="readeck_instance_url" title="Please enter a valid URL starting with http:// or https://" value="<?= $instance_url; ?>" required>
       </div>
-      <label class="group-name" for="api_token"><?= _t('ext.readeckButton.configure.api_token'); ?></label>
+      <label class="group-name" for="readeck_api_token"><?= _t('ext.readeckButton.configure.api_token'); ?></label>
       <div class="group-controls">
-        <input type="password" name="api_token" id="api_token" value="<?= $api_token; ?>" required>
+        <input type="password" name="readeck_api_token" id="readeck_api_token" value="<?= $api_token; ?>" required>
       </div>
     </div>
 

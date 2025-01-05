@@ -4,7 +4,7 @@ return array(
   'readeckButton' => array(
     'configure' => array(
       'api_token' => 'Token API',
-      'api_token_description' => '<ul class="listedNumbers">
+      'api_token_description' => '<ul class="rb_listedNumbers">
         <li>Navigujte do své Readeck instance na \'<c><vaše_instance>/profile/tokens</c>\'</li>
         <li>Vytvořte nový token API minimálně s oprávněním \'<c>Záložky : Pouze k zápisu</c>\'</li>
         <li>Zadejte URL své Readeck instance a token API a klikněte na \'Připojit se k Readecku\'</li>

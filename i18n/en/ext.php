@@ -4,7 +4,7 @@ return array(
   'readeckButton' => array(
     'configure' => array(
       'api_token' => 'API token',
-      'api_token_description' => '<ul class="listedNumbers">
+      'api_token_description' => '<ul class="rb_listedNumbers">
         <li>Go to your Readeck instance and navigate to \'<c><your_readeck_instance>/profile/tokens</c>\'</li>
         <li>Create a new API token with at least the \'<c>Bookmarks : Write Only</c>\' permission</li>
         <li>Enter your Readeck instance url and API token and hit \'Connect to Readeck\'</li>

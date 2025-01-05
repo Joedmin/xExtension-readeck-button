@@ -14,23 +14,23 @@
   background: #1abc9c;
 }
 
-input#api_token {
+input#readeck_api_token {
   width: 300px;
 }
 
-input#keyboard_shortcut {
+input#readeck_shortcut {
   width: 30px;
 }
 
-.listedNumbers {
+.rb_listedNumbers {
   list-style-type: decimal;
 }
 
-.item-element.readeckButton .disabled {
+.rb_disabled {
   display: none !important;
 }
 
-.lds-dual-ring {
+.rb_lds-dual-ring {
   display: inline-block;
   width: 12px;
   height: 12px;
@@ -39,7 +39,7 @@ input#keyboard_shortcut {
   margin: -4px 0 0 -2px;
 }
 
-.lds-dual-ring:after {
+.rb_lds-dual-ring:after {
   content: " ";
   display: block;
   width: 12px;
@@ -47,13 +47,14 @@ input#keyboard_shortcut {
   border-radius: 50%;
   border: 2px solid #e74c3c;
   border-color: #e74c3c transparent #e74c3c transparent;
-  animation: lds-dual-ring 1.2s linear infinite;
+  animation: rb_lds-dual-ring 1.2s linear infinite;
 }
 
-@keyframes lds-dual-ring {
+@keyframes rb_lds-dual-ring {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
