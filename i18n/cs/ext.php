@@ -28,6 +28,7 @@ return array(
       'relog_required' => 'Je nutné provést opětovné přihlášení na Readeck! Odhlaste se a znovu přihlaste v nastavení rozšíření.',
       'request_access_failed' => 'Žádost o přístup se nezdařila! Kód chyby Readeck API: %s',
       'article_not_found' => 'Nelze najít článek!',
+      'authorization_revoked' => 'Autorizace úspěšně zrušena!'
     )
   ),
 );
