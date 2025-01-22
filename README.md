@@ -36,4 +36,4 @@ This extension is based on [freshrss-pocket-button](https://github.com/christian
 
 Thank you very much [Christian Putzke](https://github.com/christian-putzke) for creating the original extension. I used it every day until migrating from Pocket to Readeck.
 
-Original icon is used from the original [Readeck repository](https://codeberg.org/readeck/readeck) and the outlined version is done using [Online Vector Designing Apps](https://vectordad.com/photo-to-outline/).
+Original Readeck icon is used from the original [Readeck repository](https://codeberg.org/readeck/readeck) and the outlined version was made using [Inskape](https://inkscape.org/).
