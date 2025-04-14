@@ -25,6 +25,7 @@ return array(
       'authorized_success' => 'Authorization successful!',
       'authorized_aborted' => 'Authorization aborted!',
       'authorized_failed' => 'Authorization failed! Readeck API error code: %s',
+      'relog_required' => 'Relog to Readeck is required! Please log out and log back in in the extension settings.',
       'request_access_failed' => 'Access request failed! Readeck API error code: %s',
       'article_not_found' => 'Can\'t find article!',
     )

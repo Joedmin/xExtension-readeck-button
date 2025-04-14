@@ -21,6 +21,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
         'failed_to_add_article_to_readeck' => _t('ext.readeckButton.notifications.failed_to_add_article_to_readeck', '%s'),
         'ajax_request_failed' => _t('ext.readeckButton.notifications.ajax_request_failed'),
         'article_not_found' => _t('ext.readeckButton.notifications.article_not_found'),
+        'relog_required' => _t('ext.readeckButton.notifications.relog_required'),
       )
     ));
 
@@ -61,9 +62,6 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
   public function revokeAccessAction(): void
   {
-    // TODO: remove in the next version
-    $this->migrateConfigvariables();
-
     FreshRSS_Context::userConf()->_attribute('readeck_instance_url');
     FreshRSS_Context::userConf()->_attribute('readeck_api_token');
     FreshRSS_Context::userConf()->_attribute('readeck_username');
@@ -71,60 +69,6 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
     $url_redirect = array('c' => 'extension', 'a' => 'configure', 'params' => array('e' => 'Readeck Button'));
     Minz_Request::forward($url_redirect);
-  }
-
-  // TODO: remove this method after the next version - all users should've already been migrated, hopefuly
-  private function migrateConfigvariables(): void
-  {
-    $migrated = FreshRSS_Context::userConf()->hasParam('readeck_migrated');
-    if ($migrated) {
-      // Already migrated.
-      return;
-    }
-
-    $username = FreshRSS_Context::userConf()->attributeString('username');
-    $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('keyboard_shortcut');
-    $instance_url = FreshRSS_Context::userConf()->attributeString('instance_api_url');
-    $api_token = FreshRSS_Context::userConf()->attributeString('api_token');
-
-    if (!isset($username) && !isset($instance_url) && !isset($api_token)) {
-      // Already migrated.
-      FreshRSS_Context::userConf()->_attribute('readeck_migrated', true);
-      FreshRSS_Context::userConf()->save();
-      return;
-    }
-
-    // Migrate to base url
-    if (substr($instance_url, -1) == '/')
-    {
-      $instance_url = substr($instance_url, 0, -1);
-    }
-    if (substr($instance_url, -4) == '/api')
-    {
-      $instance_url = substr($instance_url, 0, -4);
-    }
-
-    // Save them with preix
-    FreshRSS_Context::userConf()->_attribute('readeck_username', $username);
-    FreshRSS_Context::userConf()->_attribute('readeck_instance_url', $instance_url);
-    FreshRSS_Context::userConf()->_attribute('readeck_api_token', $api_token);
-
-    // Remove old variables
-    FreshRSS_Context::userConf()->_attribute('username');
-    FreshRSS_Context::userConf()->_attribute('instance_api_url');
-    FreshRSS_Context::userConf()->_attribute('api_token');
-
-    if (isset($keyboard_shortcut)) {
-      FreshRSS_Context::userConf()->_attribute('readeck_shortcut', $keyboard_shortcut);
-      FreshRSS_Context::userConf()->_attribute('keyboard_shortcut');
-    }
-    else {
-      // Does not matter, user might have not even set it
-    }
-
-    // Migration complete
-    FreshRSS_Context::userConf()->_attribute('readeck_migrated', true);
-    FreshRSS_Context::userConf()->save();
   }
 
   public function addAction(): void
@@ -136,7 +80,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     $entry = $entry_dao->searchById($entry_id);
 
     if ($entry === null) {
-      echo json_encode(array('status' => 404));
+      echo json_encode(array('errorCode' => 404));
       return;
     }
 
@@ -144,12 +88,9 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
       'url' => $entry->link(),
     );
 
-    // TODO: remove in the next 2 versions
-    $this->migrateConfigvariables();
-
+    // Errors are handled in the JS
     $result = $this->curlPostRequest('/bookmarks', $post_data);
     $result['response'] = array('title' => $entry->title());
-
     echo json_encode($result);
   }
 

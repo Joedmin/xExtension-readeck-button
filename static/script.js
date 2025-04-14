@@ -113,11 +113,8 @@ async function add_to_readeck(readeckButton, active)
 
       if (!response.ok)
       {
-        if (response.status === 404)
-        {
-          openNotification(readeck_button_vars.i18n.article_not_found, 'readeck_button_bad');
-        }
         requestFailed(activeId, readeckButtonImg, loadingAnimation);
+        openNotification(readeck_button_vars.i18n.failed_to_add_article_to_readeck.replace('%s', json.errorCode), 'readeck_button_bad');
         return;
       }
 
@@ -129,11 +126,34 @@ async function add_to_readeck(readeckButton, active)
         return;
       }
 
-      readeckButtonImg.setAttribute("src", readeck_button_vars.icons.added_to_readeck);
-      openNotification(readeck_button_vars.i18n.added_article_to_readeck.replace('%s', json.response.title), 'readeck_button_good');
-    })
-    .catch((e) =>
-    {
-      requestFailed(activeId, readeckButtonImg, loadingAnimation);
+      console.log(readeck_button_vars);
+      console.log(json.errorCode);
+
+      switch (json.errorCode)
+      {
+        case 200:
+        case 201:
+        case 202:
+        case 301:
+          readeckButtonImg.setAttribute("src", readeck_button_vars.icons.added_to_readeck);
+          openNotification(readeck_button_vars.i18n.added_article_to_readeck.replace('%s', json.response.title), 'readeck_button_good');
+          break;
+
+        case 401:
+          openNotification(readeck_button_vars.i18n.relog_required, 'readeck_button_bad');
+          break;
+
+        case 404:
+          openNotification(readeck_button_vars.i18n.article_not_found, 'readeck_button_bad');
+          break;
+
+        case 500:
+          openNotification(readeck_button_vars.i18n.failed_to_add_article_to_readeck, 'readeck_button_bad');
+          break;
+
+        default:
+          requestFailed(activeId, readeckButtonImg, loadingAnimation);
+          break;
+      }
     });
 }
