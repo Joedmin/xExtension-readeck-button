@@ -63,8 +63,7 @@
           <li class="dropdown-header"><?= _t('index.tag.related') ?></li>
           <?php
           foreach ($tags as $tag) {
-            ?><li class="item"><a href="<?= _url('index', 'index', 'search', '#' .
-              FreshRSS_tag_Controller::escapeForSearch($tag)) ?>"><?= $tag ?></a></li><?php
+            ?><li class="item"><a href="<?= _url('index', 'index', 'search', '#' . str_replace(' ', '+', htmlspecialchars_decode($tag, ENT_QUOTES))) ?>"><?= $tag ?></a></li><?php
           } ?>
         </ul>
         <a class="dropdown-close" href="#close">❌</a>
