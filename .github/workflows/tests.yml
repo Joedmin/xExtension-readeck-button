@@ -2,12 +2,11 @@ name: Automated tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, dev]
   pull_request:
-    branches: [ main ]
+    branches: [main, dev]
 
 jobs:
-
   tests:
     # https://github.com/actions/virtual-environments
     runs-on: ubuntu-22.04
@@ -16,37 +15,37 @@ jobs:
         working-directory: ./Extensions
 
     steps:
-    - name: Git checkout source code
-      uses: actions/checkout@v4
-      with:
-        path: Extensions
+      - name: Git checkout source code
+        uses: actions/checkout@v4
+        with:
+          path: Extensions
 
-    # Composer tests
+      # Composer tests
+      - name: Check PHP syntax
+        run: composer run-script php-lint
 
-    - name: Check PHP syntax
-      run: composer run-script php-lint
+      - name: Check PHTML syntax
+        run: composer run-script phtml-lint
 
-    - name: Check PHTML syntax
-      run: composer run-script phtml-lint
+      - name: Use Composer cache
+        id: composer-cache
+        uses: actions/cache@v4
+        with:
+          path: Extensions/vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Use Composer cache
-      id: composer-cache
-      uses: actions/cache@v4
-      with:
-        path: Extensions/vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Run Composer install
+        run: composer install --prefer-dist --no-progress
+        if: steps.composer-cache.outputs.cache-hit != 'true'
 
-    - name: Run Composer install
-      run: composer install --prefer-dist --no-progress
-      if: steps.composer-cache.outputs.cache-hit != 'true'
+      - name: Git checkout FreshRSS source code
+        uses: actions/checkout@v4
+        with:
+          repository: FreshRSS/FreshRSS
+          path: FreshRSS
+          ref: latest
 
-    - name: Git checkout FreshRSS source code
-      uses: actions/checkout@v4
-      with:
-        repository: FreshRSS/FreshRSS
-        path: FreshRSS
-
-    - name: PHPStan
-      run: composer run-script phpstan
+      - name: PHPStan
+        run: composer run-script phpstan
