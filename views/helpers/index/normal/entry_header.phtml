@@ -3,6 +3,7 @@
 	/** @var FreshRSS_View $this */
 	$topline_read = FreshRSS_Context::userConf()->topline_read;
 	$topline_favorite = FreshRSS_Context::userConf()->topline_favorite;
+	$topline_myLabels = FreshRSS_Context::userConf()->topline_myLabels;
 	$topline_sharing = FreshRSS_Context::userConf()->topline_sharing;
 	$topline_website = FreshRSS_Context::userConf()->topline_website;
 	$topline_thumbnail = FreshRSS_Context::userConf()->topline_thumbnail;
@@ -11,7 +12,10 @@
 	$topline_date = FreshRSS_Context::userConf()->topline_date;
 	$topline_link = FreshRSS_Context::userConf()->topline_link;
 	$lazyload = FreshRSS_Context::userConf()->lazyload;
-?><ul class="horizontal-list flux_header website<?= $topline_website ?>"><?php
+	if ($this->feed === null || $this->entry === null) {
+		return;
+	}
+?><ul class="horizontal-list flux_header website<?= $topline_website ?>" data-website-name="<?= $this->feed->name() ?>" data-article-authors="<?= implode(' · ', $this->entry->authors()) ?>"><?php
 	if (FreshRSS_Auth::hasAccess()) {
 		if ($topline_read) {
 			?><li class="item manage"><?php
@@ -65,24 +69,26 @@
 	<li class="item titleAuthorSummaryDate">
 		<a target="_blank" rel="noreferrer" href="<?= $this->entry->link() ?>" class="item-element title<?= (($topline_thumbnail !== 'none') || $topline_summary) ? ' multiline' : '' ?>" dir="auto"><?= $this->entry->title() ?><?php
 		if ($topline_display_authors):
-			?><span class="author"><?php
-			$authors = $this->entry->authors();
-			if (is_array($authors)) {
-				$first = true;
-				foreach ($authors as $author) {
-					echo $first ? $author : ', ' . $author;
-					$first = false;
-				}
-			}
-			?></span><?php
+			?> <span class="author"><?= implode(' · ', $this->entry->authors()) ?></span><?php
 		endif;
 		?></a>
 	<?php
-		if ($topline_summary):
-			?><div class="summary"><?= trim(mb_substr(strip_tags($this->entry->content(false)), 0, 500, 'UTF-8')) ?></div><?php
+	if ($topline_summary):
+		?><div class="summary"><?= trim(mb_substr(strip_tags($this->entry->content(false)), 0, 500, 'UTF-8')) ?></div><?php
 	endif; ?>
 	<?php if ($topline_date) { ?><span class="item-element date"><time datetime="<?= $this->entry->machineReadableDate() ?>"><?= $this->entry->date() ?></time>&nbsp;</span><?php } ?>
 	</li>
+	<?php if ($topline_myLabels) { ?>
+		<li class="item labels">
+			<div class="item-element dropdown dynamictags">
+				<div id="dropdown-labels2-<?= $this->entry->id() ?>" class="dropdown-target"></div>
+				<a class="dropdown-toggle" href="#dropdown-labels2-<?= $this->entry->id() ?>" title="<?= _t('index.menu.mylabels') ?>">
+					<?= _i('label') ?>
+				</a>
+				<?php /* labels_article_template */ ?>
+			</div>
+		</li>
+	<?php } ?>
 	<?php if ($topline_sharing) { ?>
 		<li class="item share">
 			<div class="item-element dropdown">
@@ -90,8 +96,7 @@
 				<a class="dropdown-toggle" href="#dropdown-share2-<?= $this->entry->id() ?>" title="<?= _t('index.share') ?>">
 					<?= _i('share') ?>
 				</a>
-				<?php $this->renderHelper('index/normal/entry_share_menu'); ?>
-				<a class="dropdown-close" href="#close">❌</a>
+				<?php /* share_article_template */ ?>
 			</div>
 		</li>
 	<?php } ?>

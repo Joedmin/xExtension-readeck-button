@@ -42,59 +42,50 @@
 		}
 	}
 	if ($bottomline_myLabels) {
-	?><li class="item labels">
-		<div class="item-element dropdown dynamictags">
-			<div id="dropdown-labels-<?= $this->entry->id() ?>" class="dropdown-target"></div>
-			<a class="dropdown-toggle" href="#dropdown-labels-<?= $this->entry->id() ?>">
-				<?= _i('label') ?><?= _t('index.menu.tags') ?>
-			</a>
-			<ul class="dropdown-menu dropdown-menu-scrollable scrollbar-thin">
-				<li class="dropdown-header">
-					<?= _t('index.menu.tags') ?>
-					<?php if (FreshRSS_Auth::hasAccess()) { ?>
-						<a href="<?= _url('tag', 'index') ?>"><?= _i('configure') ?></a>
-					<?php } ?>
-				</li>
-				<!-- Ajax -->
-			</ul>
-			<a class="dropdown-close" href="#close">❌</a>
-		</div>
-	</li><?php
-	}
-	$tags = $bottomline_tags ? $this->entry->tags() : null;
-	if (!empty($tags)) {
-	?><li class="item tags">
-		<div class="item-element dropdown">
-			<div id="dropdown-tags-<?= $this->entry->id() ?>" class="dropdown-target"></div>
-			<a class="dropdown-toggle" href="#dropdown-tags-<?= $this->entry->id() ?>">
-				<?= _i('tag') ?><?= _t('index.tag.related') ?>
-			</a>
-			<ul class="dropdown-menu">
-				<?php
-				foreach ($tags as $tag) {
-					?><li class="item"><a href="<?= _url('index', 'index', 'search', '#' . str_replace(' ', '+', htmlspecialchars_decode($tag, ENT_QUOTES))) ?>"><?= $tag ?></a></li><?php
-				} ?>
-			</ul>
-			<a class="dropdown-close" href="#close">❌</a>
-		</div>
-	</li><?php
-	}
-	?><li class="item share"><?php
-		if ($bottomline_sharing) {
-		?><div class="item-element dropdown">
-			<div id="dropdown-share-<?= $this->entry->id() ?>" class="dropdown-target"></div>
-			<a class="dropdown-toggle" href="#dropdown-share-<?= $this->entry->id() ?>">
-				<?= _i('share') ?><?= _t('index.share') ?>
-			</a>
-			<?php $this->renderHelper('index/normal/entry_share_menu'); ?>
-			<a class="dropdown-close" href="#close">❌</a>
-		</div>
-		<?php } ?>
-	</li><?php
-	if ($bottomline_date) {
-		?><li class="item date"><time datetime="<?= $this->entry->machineReadableDate() ?>" class="item-element"><?= $this->entry->date() ?></time>&nbsp;</li><?php
-	}
-	if ($bottomline_link) {
-		?><li class="item link"><a target="_blank" class="item-element" rel="noreferrer" href="<?= $this->entry->link() ?>" title="<?= _t('conf.shortcut.see_on_website') ?>"><?= _i('link') ?></a></li><?php
-	} ?>
-</ul>
+    ?><li class="item labels">
+      <div class="item-element dropdown dynamictags">
+        <div id="dropdown-labels-<?= $this->entry->id() ?>" class="dropdown-target"></div>
+        <a class="dropdown-toggle" href="#dropdown-labels-<?= $this->entry->id() ?>">
+          <?= _i('label') ?><span class="dropdown-label"><?= _t('index.menu.mylabels') ?></span>
+        </a>
+      </div>
+    </li><?php
+    }
+    $tags = $bottomline_tags ? $this->entry->tags() : null;
+    if (!empty($tags)) {
+    ?><li class="item tags">
+      <div class="item-element dropdown">
+        <div id="dropdown-tags-<?= $this->entry->id() ?>" class="dropdown-target"></div>
+        <a class="dropdown-toggle" href="#dropdown-tags-<?= $this->entry->id() ?>">
+          <?= _i('tag') ?><span class="dropdown-label"><?= _t('index.tag.related') ?></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="dropdown-header"><?= _t('index.tag.related') ?></li>
+          <?php
+          foreach ($tags as $tag) {
+            ?><li class="item"><a href="<?= _url('index', 'index', 'search', '#' .
+              FreshRSS_tag_Controller::escapeForSearch($tag)) ?>"><?= $tag ?></a></li><?php
+          } ?>
+        </ul>
+        <a class="dropdown-close" href="#close">❌</a>
+      </div>
+    </li><?php
+    }
+    ?><li class="item share"><?php
+      if ($bottomline_sharing) {
+      ?><div class="item-element dropdown">
+        <div id="dropdown-share-<?= $this->entry->id() ?>" class="dropdown-target"></div>
+        <a class="dropdown-toggle" href="#dropdown-share-<?= $this->entry->id() ?>">
+          <?= _i('share') ?><span class="dropdown-label"><?= _t('index.share') ?></span>
+        </a>
+        <?php /* entry_share_menu */ ?>
+      </div>
+      <?php } ?>
+    </li><?php
+    if ($bottomline_date) {
+      ?><li class="item date"><time datetime="<?= $this->entry->machineReadableDate() ?>" class="item-element"><?= $this->entry->date() ?></time>&nbsp;</li><?php
+    }
+    if ($bottomline_link) {
+      ?><li class="item link"><a target="_blank" class="item-element" rel="noreferrer" href="<?= $this->entry->link() ?>" title="<?= _t('conf.shortcut.see_on_website') ?>"><?= _i('link') ?></a></li><?php
+    } ?>
+  </ul>
