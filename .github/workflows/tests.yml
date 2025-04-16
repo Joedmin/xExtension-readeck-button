@@ -47,6 +47,7 @@ jobs:
       with:
         repository: FreshRSS/FreshRSS
         path: FreshRSS
+        ref: latest
 
     - name: PHPStan
       run: composer run-script phpstan
