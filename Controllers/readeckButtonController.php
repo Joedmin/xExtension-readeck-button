@@ -85,9 +85,15 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
       return;
     }
 
-    $post_data = array(
-      'url' => $entry->link(),
-    );
+    $post_data = FreshRSS_Context::userConf()->attributeString("readeck_content") === "on"
+      ? array(
+        'url' => $entry->link(),
+        'html' => $entry->content(),
+        'title' => $entry->title(),
+      )
+      : array(
+        'url' => $entry->link(),
+      );
 
     // Errors are handled in the JS
     $result = $this->curlPostRequest('/bookmarks', $post_data);

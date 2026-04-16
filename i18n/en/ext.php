@@ -22,7 +22,10 @@ return array(
       'button_location_header_bottom' => 'Top and bottom line',
       'button_location_header' => 'Top line',
       'button_location_bottom' => 'Bottom line',
-      'button_location_hidden' => 'Hidden'
+      'button_location_hidden' => 'Hidden',
+      'send_content' => 'Send feed\'s content',
+      'send_content_description' => 'Rather than having Readeck fetch the article\'s content, this option directly sends the content from the feed to Readeck.
+       It is useful in the case of articles that are behind a paywall but complete in the feed.'
     ),
     'notifications' => array(
       'added_article_to_readeck' => 'Successfully added <i>\'%s\'</i> to Readeck!',

@@ -25,6 +25,8 @@ class ReadeckButtonExtension extends Minz_Extension
 
     $keyboard_shortcut = Minz_Request::paramString('readeck_shortcut');
     FreshRSS_Context::userConf()->_attribute('readeck_shortcut', $keyboard_shortcut);
+    $send_content = Minz_Request::paramString('send_content');
+    FreshRSS_Context::userConf()->_attribute('readeck_content', $send_content);
     FreshRSS_Context::userConf()->save();
 
     $button_location = Minz_Request::paramString('readeck_button_location');
