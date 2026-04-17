@@ -15,7 +15,7 @@ return array(
       'instance_url' => 'URL adresa instance Readeck',
       'keyboard_shortcut' => ' Klávesová zkratka',
       'extension_disabled' => 'Před připojením ke službě Readeck je nutné rozšíření povolit!',
-      'connected_to_readeck' => 'Jste připojeni k Readecku skrze účet <b>%s</b> zapomocí API tokenu <b>%s</b> na adrese <b>%s</b>.',
+      'connected_to_readeck' => 'Jste připojeni jako <b>%s</b> k Readecku na adrese <b>%s</b>.',
       'revoke_access' => 'Odpojit se od Readecku!'
     ),
     'notifications' => array(

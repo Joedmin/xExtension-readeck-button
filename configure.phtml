@@ -56,7 +56,7 @@ $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('readeck_shor
 
 <?php if (!empty($username) && !empty($api_token) && !empty($instance_url)) : ?>
   <p class="alert alert-success">
-    <?= _t('ext.readeckButton.configure.connected_to_readeck', $username, $api_token, $instance_url); ?>
+    <?= _t('ext.readeckButton.configure.connected_to_readeck', $username, $instance_url); ?>
   </p>
   <form action="<?= _url('readeckButton', 'revokeAccess'); ?>" method="post">
     <input type="hidden" name="_csrf" value="<?= FreshRSS_Auth::csrfToken(); ?>" />

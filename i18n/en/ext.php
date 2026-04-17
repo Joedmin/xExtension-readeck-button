@@ -15,7 +15,7 @@ return array(
       'instance_url' => 'Readeck instance url',
       'keyboard_shortcut' => 'Keyboard shortcut',
       'extension_disabled' => 'You need to enable the extension before you can connect to Readeck!',
-      'connected_to_readeck' => 'You are connected to Readeck with the account <b>%s</b> using the access token <b>%s</b> at <b>%s</b>.',
+      'connected_to_readeck' => 'You are connected as <b>%s</b> to Readeck at <b>%s</b>.',
       'revoke_access' => 'Disconnect from Readeck!'
     ),
     'notifications' => array(
