@@ -16,7 +16,13 @@ return array(
       'keyboard_shortcut' => ' Klávesová zkratka',
       'extension_disabled' => 'Před připojením ke službě Readeck je nutné rozšíření povolit!',
       'connected_to_readeck' => 'Jste připojeni jako <b>%s</b> k Readecku na adrese <b>%s</b>.',
-      'revoke_access' => 'Odpojit se od Readecku!'
+      'revoke_access' => 'Odpojit se od Readecku!',
+      'save_changes' => 'Uložit',
+      'button_location' => 'Pozice tlačítka. Klávesová skratka funguje i v případě možnosti \'Skryté\'.',
+      'button_location_header_bottom' => 'Horní i spodní řádek',
+      'button_location_header' => 'Horní řádek',
+      'button_location_bottom' => 'Spodní řádek',
+      'button_location_hidden' => 'Skryté'
     ),
     'notifications' => array(
       'added_article_to_readeck' => 'Úspěšně přidán <i>\'%s\'</i> do Readecku!',
@@ -28,7 +34,9 @@ return array(
       'relog_required' => 'Je nutné provést opětovné přihlášení na Readeck! Odhlaste se a znovu přihlaste v nastavení rozšíření.',
       'request_access_failed' => 'Žádost o přístup se nezdařila! Kód chyby Readeck API: %s',
       'article_not_found' => 'Nelze najít článek!',
-      'authorization_revoked' => 'Autorizace úspěšně zrušena!'
+      'authorization_revoked' => 'Autorizace úspěšně zrušena!',
+      'changes_saved_sucessfully' => "Změny úspěšně uloženy!",
+      'changes_failed' => "Nepovedlo se uložit změny! Hodnota '%s' není podporována!",
     )
   ),
 );

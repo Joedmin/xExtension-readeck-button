@@ -16,7 +16,13 @@ return array(
       'keyboard_shortcut' => 'Keyboard shortcut',
       'extension_disabled' => 'You need to enable the extension before you can connect to Readeck!',
       'connected_to_readeck' => 'You are connected as <b>%s</b> to Readeck at <b>%s</b>.',
-      'revoke_access' => 'Disconnect from Readeck!'
+      'revoke_access' => 'Disconnect from Readeck!',
+      'save_changes' => 'Save',
+      'button_location' => 'Readeck button possition. The keyboard shortcut works even when the \'Hidden\' option is selected.',
+      'button_location_header_bottom' => 'Top and bottom line',
+      'button_location_header' => 'Top line',
+      'button_location_bottom' => 'Bottom line',
+      'button_location_hidden' => 'Hidden'
     ),
     'notifications' => array(
       'added_article_to_readeck' => 'Successfully added <i>\'%s\'</i> to Readeck!',
@@ -28,7 +34,9 @@ return array(
       'relog_required' => 'Relog to Readeck is required! Please log out and log back in in the extension settings.',
       'request_access_failed' => 'Access request failed! Readeck API error code: %s',
       'article_not_found' => 'Can\'t find article!',
-      'authorization_revoked' => 'Authorization successfully revoked!'
+      'authorization_revoked' => 'Authorization successfully revoked!',
+      'changes_saved_sucessfully' => "Changes saved successfully!",
+      'changes_failed' => "Could not save changes! Value '%s' is not supported!",
     )
   ),
 );
