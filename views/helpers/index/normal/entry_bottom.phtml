@@ -22,8 +22,9 @@
 		}
 
 		$extension = Minz_ExtensionManager::findExtension('Readeck Button');
-		$readeck_button_icon = $extension->getFileUrl('add_to_readeck.svg', 'svg');
+		$readeck_button_icon = $extension->getFileUrl('add_to_readeck.svg');
 
+		// @phpstan-ignore method.notFound
 		if ($extension->isConfigured()) {
 			?>
 			<li class="item manage"><?php
