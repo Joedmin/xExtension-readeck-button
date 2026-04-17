@@ -14,7 +14,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
         ? FreshRSS_Context::userConf()->attributeString('readeck_shortcut')
         : '',
       'icons' => array(
-        'added_to_readeck' => $extension->getFileUrl('added_to_readeck.svg', 'svg'),
+        'added_to_readeck' => $extension->getFileUrl('added_to_readeck.svg'),
       ),
       'i18n' => array(
         'added_article_to_readeck' => _t('ext.readeckButton.notifications.added_article_to_readeck', '%s'),
@@ -37,8 +37,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     $api_token = Minz_Request::paramString('readeck_api_token');
 
     // Handle leading slash
-    if (substr($instance_url, -1) == '/')
-    {
+    if (substr($instance_url, -1) == '/') {
       $instance_url = substr($instance_url, 0, -1);
     }
 
@@ -172,7 +171,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     );
   }
 
-   /**
+  /**
    * @return array<string,string>
    */
   private function httpHeaderToArray(string $header): array
