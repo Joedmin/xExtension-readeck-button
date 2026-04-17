@@ -22,7 +22,15 @@ return array(
       'button_location_header_bottom' => 'Top and bottom line',
       'button_location_header' => 'Top line',
       'button_location_bottom' => 'Bottom line',
-      'button_location_hidden' => 'Hidden'
+      'button_location_hidden' => 'Hidden',
+      'behavior' => "Behavior",
+      'behavior_smart' => "Smart",
+      'behavior_link' => "Link",
+      'behavior_content' => "Content",
+      'behavior_description' => '<ul>
+      <li><b>Smart</b> (default) - toggles between old and new behavior based on if feed authentication is set up</li>
+      <li><b>Link</b> (old behavior) - sends only article link and lets Readeck fetch the content</li>
+      <li><b>Content</b> (new behavior) - directly sends the content from the feed to Readeck. Useful when articles are behind a paywall but complete in the feed.</li></ul>'
     ),
     'notifications' => array(
       'added_article_to_readeck' => 'Successfully added <i>\'%s\'</i> to Readeck!',

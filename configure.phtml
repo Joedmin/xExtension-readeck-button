@@ -7,6 +7,7 @@ $api_token = FreshRSS_Context::userConf()->attributeString('readeck_api_token');
 $username = FreshRSS_Context::userConf()->attributeString('readeck_username');
 $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('readeck_shortcut');
 $button_location = FreshRSS_Context::userConf()->attributeString('readeck_button_location');
+$behavior = FreshRSS_Context::userConf()->attributeString('readeck_behavior');
 ?>
 
 <form action="<?= _url('extension', 'configure', 'e', urlencode($this->getName())); ?>" method="post">
@@ -15,6 +16,16 @@ $button_location = FreshRSS_Context::userConf()->attributeString('readeck_button
     <label class="group-name" for="readeck_shortcut"><?= _t('ext.readeckButton.configure.keyboard_shortcut'); ?></label>
     <div class="group-controls">
       <input type="text" name="readeck_shortcut" id="readeck_shortcut" maxlength="1" value="<?= $keyboard_shortcut; ?>">
+    </div>
+
+    <label class="group-name" for="readeck_behavior"><?= _t('ext.readeckButton.configure.behavior'); ?></label>
+    <div class="group-controls">
+      <select name="readeck_behavior" id="readeck_behavior">
+        <option value="smart" <?= ($behavior == "smart") ? "selected" : "" ?>><?= _t('ext.readeckButton.configure.behavior_smart'); ?></option>
+        <option value="link" <?= ($behavior == "link") ? "selected" : "" ?>><?= _t('ext.readeckButton.configure.behavior_link'); ?></option>
+        <option value="content" <?= ($behavior == "content") ? "selected" : "" ?>><?= _t('ext.readeckButton.configure.behavior_content'); ?></option>
+      </select>
+      <p id="behavior_description"><?= _t('ext.readeckButton.configure.behavior_description'); ?></p>
     </div>
 
     <label class="group-name" for="readeck_button_location"><?= _t('ext.readeckButton.configure.button_location'); ?></label>
@@ -27,6 +38,7 @@ $button_location = FreshRSS_Context::userConf()->attributeString('readeck_button
       </select>
     </div>
   </div>
+
   <div class="form-group form-actions">
     <div class="group-controls">
       <button type="submit" class="btn btn-important"><?= _t('ext.readeckButton.configure.save_changes'); ?></button>

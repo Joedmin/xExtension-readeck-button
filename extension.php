@@ -25,6 +25,8 @@ class ReadeckButtonExtension extends Minz_Extension
 
     $keyboard_shortcut = Minz_Request::paramString('readeck_shortcut');
     FreshRSS_Context::userConf()->_attribute('readeck_shortcut', $keyboard_shortcut);
+    $send_content = Minz_Request::paramString('send_content');
+    FreshRSS_Context::userConf()->_attribute('readeck_content', $send_content);
     FreshRSS_Context::userConf()->save();
 
     $button_location = Minz_Request::paramString('readeck_button_location');
@@ -37,12 +39,26 @@ class ReadeckButtonExtension extends Minz_Extension
       case "hidden":
         FreshRSS_Context::userConf()->_attribute('readeck_button_location', $button_location);
         FreshRSS_Context::userConf()->save();
-
-        Minz_Request::good(_t('ext.readeckButton.notifications.changes_saved_sucessfully'), $url_redirect);
-        return;
+        break;
       default:
         Minz_Request::bad(_t('ext.readeckButton.notifications.changes_failed', $button_location), $url_redirect);
+        return;
     }
+
+    $readeck_behavior = Minz_Request::paramString('readeck_behavior');
+    switch ($readeck_behavior) {
+      case "smart":
+      case "link":
+      case "content":
+        FreshRSS_Context::userConf()->_attribute('readeck_behavior', $readeck_behavior);
+        FreshRSS_Context::userConf()->save();
+        break;
+      default:
+        Minz_Request::bad(_t('ext.readeckButton.notifications.changes_failed', $readeck_behavior), $url_redirect);
+        return;
+    }
+
+    Minz_Request::good(_t('ext.readeckButton.notifications.changes_saved_sucessfully'), $url_redirect);
   }
 
   /**
