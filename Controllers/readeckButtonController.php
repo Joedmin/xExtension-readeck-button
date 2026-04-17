@@ -85,7 +85,18 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
       return;
     }
 
-    $post_data = FreshRSS_Context::userConf()->attributeString("readeck_content") === "on"
+    $behavior = FreshRSS_Context::userConf()->attributeString("readeck_behavior");
+
+    // TO BE REMOVED:
+    // Update missing entry after update
+    if ($behavior == "") {
+      FreshRSS_Context::userConf()->_attribute('readeck_behavior', "smart");
+      FreshRSS_Context::userConf()->save();
+    }
+
+    $shouldSendContent = $behavior === "content"
+      || ($behavior === "smart" && $this->isFeedAuthenticated($entry->feed()));
+    $post_data = $shouldSendContent
       ? array(
         'url' => $entry->link(),
         'html' => $entry->content(),
@@ -99,6 +110,27 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     $result = $this->curlPostRequest('/bookmarks', $post_data);
     $result['response'] = array('title' => $entry->title());
     echo json_encode($result);
+  }
+
+  private function isFeedAuthenticated(FreshRSS_Feed $feed): bool
+  {
+    if ($feed->httpAuth(true) !== '') {
+      return true;
+    }
+
+    $curlParams = $feed->attributeArray('curl_params');
+    if (is_array($curlParams)) {
+      $httpHeaders = $curlParams[CURLOPT_HTTPHEADER] ?? null;
+      if (is_array($httpHeaders)) {
+        foreach ($httpHeaders as $header) {
+          if (is_string($header) && stripos($header, 'Authorization:') === 0) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
