@@ -6,6 +6,7 @@ $instance_url = FreshRSS_Context::userConf()->attributeString('readeck_instance_
 $api_token = FreshRSS_Context::userConf()->attributeString('readeck_api_token');
 $username = FreshRSS_Context::userConf()->attributeString('readeck_username');
 $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('readeck_shortcut');
+$button_location = FreshRSS_Context::userConf()->attributeString('readeck_button_location');
 ?>
 
 <form action="<?= _url('extension', 'configure', 'e', urlencode($this->getName())); ?>" method="post">
@@ -15,11 +16,20 @@ $keyboard_shortcut = FreshRSS_Context::userConf()->attributeString('readeck_shor
     <div class="group-controls">
       <input type="text" name="readeck_shortcut" id="readeck_shortcut" maxlength="1" value="<?= $keyboard_shortcut; ?>">
     </div>
-  </div>
 
+    <label class="group-name" for="readeck_button_location"><?= _t('ext.readeckButton.configure.button_location'); ?></label>
+    <div class="group-controls">
+      <select name="readeck_button_location" id="readeck_button_location">
+        <option value="header_bottom" <?= ($button_location == "header_bottom") ? "selected" : "" ?>><?= _t('ext.readeckButton.configure.button_location_header_bottom'); ?></option>
+        <option value="header" <?= ($button_location == "header") ? "selected" : "" ?>><?= _t('ext.readeckButton.configure.button_location_header'); ?></option>
+        <option value="bottom" <?= ($button_location == "bottom") ? "selected" : "" ?>><?= _t('ext.readeckButton.configure.button_location_bottom'); ?></option>
+        <option value="hidden" <?= ($button_location == "hidden") ? "selected" : "" ?>><?= _t('ext.readeckButton.configure.button_location_hidden'); ?></option>
+      </select>
+    </div>
+  </div>
   <div class="form-group form-actions">
     <div class="group-controls">
-      <button type="submit" class="btn btn-important"><?= _t('gen.action.submit'); ?></button>
+      <button type="submit" class="btn btn-important"><?= _t('ext.readeckButton.configure.save_changes'); ?></button>
     </div>
   </div>
 </form>

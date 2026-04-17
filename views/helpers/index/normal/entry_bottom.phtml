@@ -22,12 +22,12 @@
 		}
 
 		$extension = Minz_ExtensionManager::findExtension('Readeck Button');
+    assert($extension instanceof ReadeckButtonExtension);
 		$readeck_button_icon = $extension->getFileUrl('add_to_readeck.svg');
 
-		// @phpstan-ignore method.notFound
 		if ($extension->isConfigured()) {
 			?>
-			<li class="item manage"><?php
+			<li <?= $extension->shouldBeShown("bottom") ? "class=\"item manage\"" : "class=\"item manage rb_disabled\"" ?>><?php
 				$arUrl = array('c' => 'readeckButton', 'a' => 'add', 'params' => array('id' => $this->entry->id()));
 				?><a class="item-element readeckButton" href="<?php echo Minz_Url::display($arUrl); ?>"><div class="rb_lds-dual-ring rb_disabled"></div><img class="icon" src="<?= $readeck_button_icon ?>" /></a><?php
 				?></li>

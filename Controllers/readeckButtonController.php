@@ -35,6 +35,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
   {
     $instance_url = Minz_Request::paramString('readeck_instance_url');
     $api_token = Minz_Request::paramString('readeck_api_token');
+    $button_location = Minz_Request::paramString('readeck_button_location');
 
     // Handle leading slash
     if (substr($instance_url, -1) == '/') {
@@ -43,6 +44,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
     FreshRSS_Context::userConf()->_attribute('readeck_instance_url', $instance_url);
     FreshRSS_Context::userConf()->_attribute('readeck_api_token', $api_token);
+    FreshRSS_Context::userConf()->_attribute('readeck_button_location', $button_location);
     FreshRSS_Context::userConf()->save();
 
     $result = $this->curlGetRequest('/profile');
