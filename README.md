@@ -12,6 +12,7 @@ With this extension you can simply press the Readeck Button next to an article o
 6. Enter your key in the Readeck Button extension settings
 7. Press "Connect to Readeck"
 8. *Optional Set a custom keyboard shortcut*
+8. *Optional Update the extension behavior*
 
 ## Readeck API Error codes
 If you get errors while trying to connect to Readeck, please check the [Readeck OpenAPI specification](https://codeberg.org/readeck/readeck/src/branch/main/docs/api/api.yaml).

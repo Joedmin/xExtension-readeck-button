@@ -48,16 +48,15 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     FreshRSS_Context::userConf()->save();
 
     $result = $this->curlGetRequest('/profile');
+    $url_redirect = array('c' => 'extension', 'a' => 'configure', 'params' => array('e' => 'Readeck Button'));
     if ($result['status'] == 200) {
       FreshRSS_Context::userConf()->_attribute('readeck_username', $result['response']->user->username);
       FreshRSS_Context::userConf()->save();
 
-      $url_redirect = array('c' => 'extension', 'a' => 'configure', 'params' => array('e' => 'Readeck Button'));
       Minz_Request::good(_t('ext.readeckButton.notifications.authorized_success'), $url_redirect);
       return;
     }
 
-    $url_redirect = array('c' => 'extension', 'a' => 'configure', 'params' => array('e' => 'Readeck Button'));
     Minz_Request::bad(_t('ext.readeckButton.notifications.request_access_failed', $result['status']), $url_redirect);
   }
 
@@ -85,7 +84,16 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
       return;
     }
 
-    $post_data = FreshRSS_Context::userConf()->attributeString("readeck_content") === "on"
+    $behavior = FreshRSS_Context::userConf()->attributeString("readeck_behavior");
+
+    // TO BE REMOVED:
+    // Update missing entry after update
+    if ($behavior == "") {
+      FreshRSS_Context::userConf()->_attribute('readeck_behavior', "smart");
+      FreshRSS_Context::userConf()->save();
+    }
+
+    $post_data = $this->shouldSendContent($entry->feed(), $behavior)
       ? array(
         'url' => $entry->link(),
         'html' => $entry->content(),
@@ -99,6 +107,47 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     $result = $this->curlPostRequest('/bookmarks', $post_data);
     $result['response'] = array('title' => $entry->title());
     echo json_encode($result);
+  }
+
+  private function shouldSendContent(FreshRSS_Feed $feed, string $behavior): bool
+  {
+    return $behavior === "content"
+      || ($behavior === "smart" && $this->isFeedAuthenticated($feed));
+  }
+
+  private function isFeedAuthenticated(FreshRSS_Feed $feed): bool
+  {
+    if ($feed->httpAuth(true) !== '') {
+      return true;
+    }
+
+    // TODO: tokens would be missed (tokens like X-API_KEY, ...)
+    // Check HTTP Headers
+    $curlParams = $feed->attributeArray('curl_params');
+    if (is_array($curlParams)) {
+      $httpHeaders = $curlParams[CURLOPT_HTTPHEADER] ?? null;
+      if (is_array($httpHeaders)) {
+        foreach ($httpHeaders as $header) {
+          if (is_string($header) && stripos($header, 'Authorization:') === 0) {
+            return true;
+          }
+        }
+      }
+    }
+
+    // Check URL params
+    $parts = parse_url($feed->url());
+    if (!empty($parts['query'])) {
+      $query = [];
+      parse_str($parts['query'], $query);
+      foreach (array_keys($query) as $queryParam) {
+        if (is_string($queryParam) && preg_match('/token|auth|access|key/i', $queryParam)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**

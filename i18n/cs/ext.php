@@ -22,7 +22,14 @@ return array(
       'button_location_header_bottom' => 'Horní i spodní řádek',
       'button_location_header' => 'Horní řádek',
       'button_location_bottom' => 'Spodní řádek',
-      'button_location_hidden' => 'Skryté'
+      'button_location_hidden' => 'Skryté',
+      'behavior' => 'Chování',
+      'behavior_smart' => 'Inteligentní',
+      'behavior_link' => 'Odkaz',
+      'behavior_content' => 'Obsah',
+      'behavior_description' => '<li><b>Inteligentní</b> (výchozí) - přepíná mezi starým a novým chováním na základě toho, zda je nastavena autentizace kanálu</li>
+      <li><b>Odkaz</b> (staré chování) - odešle pouze odkaz na článek a nechá Readeck načíst obsah</li>
+      <li><b>Obsah</b> (nové chování) - přímo odešle obsah ze zdroje do Readeck. Užitečné, když jsou články za paywallem, ale ve zdroji jsou kompletní.</li>'
     ),
     'notifications' => array(
       'added_article_to_readeck' => 'Úspěšně přidán <i>\'%s\'</i> do Readecku!',
