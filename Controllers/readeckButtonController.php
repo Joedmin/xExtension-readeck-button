@@ -95,7 +95,9 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
     $post_data = $this->shouldSendContent($entry, $behavior)
       ? array(
-        'url' => $entry->link(),
+        'url' => trim($entry->link()) !== ""
+          ? $entry->link()
+          : $entry->feed()->url(false),
         'html' => $entry->content(),
         'title' => $entry->title(),
       )
