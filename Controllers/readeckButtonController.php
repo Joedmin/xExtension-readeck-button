@@ -93,7 +93,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
       FreshRSS_Context::userConf()->save();
     }
 
-    $post_data = $this->shouldSendContent($entry->feed(), $behavior)
+    $post_data = $this->shouldSendContent($entry, $behavior)
       ? array(
         'url' => $entry->link(),
         'html' => $entry->content(),
@@ -109,10 +109,15 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     echo json_encode($result);
   }
 
-  private function shouldSendContent(FreshRSS_Feed $feed, string $behavior): bool
+  private function shouldSendContent(FreshRSS_Entry $entry, string $behavior): bool
   {
+    if (trim($entry->link()) === "") {
+      // Force content behavior on entries without link
+      return true;
+    }
+
     return $behavior === "content"
-      || ($behavior === "smart" && $this->isFeedAuthenticated($feed));
+      || ($behavior === "smart" && $this->isFeedAuthenticated($entry->feed()));
   }
 
   private function isFeedAuthenticated(FreshRSS_Feed $feed): bool
