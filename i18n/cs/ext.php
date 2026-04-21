@@ -32,7 +32,7 @@ return array(
       <li><b>Obsah</b> (nové chování) - přímo odešle obsah ze zdroje do Readeck. Užitečné, když jsou články za paywallem, ale ve zdroji jsou kompletní.</li>'
     ),
     'notifications' => array(
-      'added_article_to_readeck' => 'Úspěšně přidán <i>\'%s\'</i> do Readecku!',
+      'added_article_to_readeck' => 'Úspěšně přidán <a href="%s" target="_blank">\'%s\'</a> do Readecku!',
       'failed_to_add_article_to_readeck' => 'Přidání článku na Readeck se nezdařilo! Kód chyby Readeck API: %s',
       'ajax_request_failed' => 'Požadavek Ajax selhal!',
       'authorized_success' => 'Autorizace proběhla úspěšně!',

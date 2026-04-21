@@ -32,7 +32,7 @@ return array(
       <li><b>Content</b> (new behavior) - directly sends the content from the feed to Readeck. Useful when articles are behind a paywall but complete in the feed.</li>'
     ),
     'notifications' => array(
-      'added_article_to_readeck' => 'Successfully added <i>\'%s\'</i> to Readeck!',
+      'added_article_to_readeck' => 'Successfully added <a href="%s" target="_blank">\'%s\'</a> to Readeck!',
       'failed_to_add_article_to_readeck' => 'Adding article to Readeck failed! Readeck API error code: %s',
       'ajax_request_failed' => 'Ajax request failed!',
       'authorized_success' => 'Authorization successful!',

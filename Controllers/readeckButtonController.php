@@ -17,7 +17,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
         'added_to_readeck' => $extension->getFileUrl('added_to_readeck.svg'),
       ),
       'i18n' => array(
-        'added_article_to_readeck' => _t('ext.readeckButton.notifications.added_article_to_readeck', '%s'),
+        'added_article_to_readeck' => _t('ext.readeckButton.notifications.added_article_to_readeck', '%s', '%s'),
         'failed_to_add_article_to_readeck' => _t('ext.readeckButton.notifications.failed_to_add_article_to_readeck', '%s'),
         'ajax_request_failed' => _t('ext.readeckButton.notifications.ajax_request_failed'),
         'article_not_found' => _t('ext.readeckButton.notifications.article_not_found'),
@@ -228,6 +228,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
     return array(
       'response' => json_decode($response_body),
+      'bookmarkId' => $response_headers['bookmark-id'],
       'status' => curl_getinfo($curl, CURLINFO_HTTP_CODE),
       'errorCode' => isset($response_headers['x-error-code'])
         ? intval($response_headers['x-error-code'])
