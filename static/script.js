@@ -137,7 +137,7 @@ async function add_to_readeck(readeckButton, active)
         case 301:
           readeckButtonImg.setAttribute("src", readeck_button_vars.icons.added_to_readeck);
           const notificationContent = readeck_button_vars.i18n.added_article_to_readeck
-            .replace('%s', `${readeck_button_vars.instance_url}/bookmarks/${json.bookmarkId}`)
+            .replace('%s', `${readeck_button_vars.instance_url}/bookmarks/${json.response.bookmarkId}`)
             .replace('%s', json.response.title);
           openNotification(notificationContent, 'readeck_button_good');
           break;

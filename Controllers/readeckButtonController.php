@@ -107,7 +107,10 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
     // Errors are handled in the JS
     $result = $this->curlPostRequest('/bookmarks', $post_data);
-    $result['response'] = array('title' => $entry->title());
+    $result['response'] = array(
+      'title' => $entry->title(),
+      'bookmarkId' => $result['bookmarkId'] ?? null,
+    );
     echo json_encode($result);
   }
 
@@ -228,7 +231,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
 
     return array(
       'response' => json_decode($response_body),
-      'bookmarkId' => $response_headers['bookmark-id'],
+      'bookmarkId' => $response_headers['bookmark-id'] ?? null,
       'status' => curl_getinfo($curl, CURLINFO_HTTP_CODE),
       'errorCode' => isset($response_headers['x-error-code'])
         ? intval($response_headers['x-error-code'])
@@ -254,7 +257,7 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
       if (strpos($header_part, ':')) {
         $header_name = substr($header_part, 0, strpos($header_part, ':'));
         $header_value = substr($header_part, strpos($header_part, ':') + 1);
-        $headers[$header_name] = trim($header_value);
+        $headers[strtolower($header_name)] = trim($header_value);
       }
     }
 
