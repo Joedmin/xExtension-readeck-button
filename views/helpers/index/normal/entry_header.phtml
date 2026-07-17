@@ -14,13 +14,13 @@
 	$lazyload = FreshRSS_Context::userConf()->lazyload;
     $headerClasses = ['horizontal-list', 'flux_header', 'website' . $topline_website];
     if ($topline_thumbnail !== 'none') {
-            $headerClasses[] = 'has-thumbnail';
+        $headerClasses[] = 'has-thumbnail';
     }
     if ($topline_summary) {
-            $headerClasses[] = 'has-summary';
+        $headerClasses[] = 'has-summary';
     }
     if ($topline_date) {
-            $headerClasses[] = 'has-date';
+        $headerClasses[] = 'has-date';
     }
 	if ($this->feed === null || $this->entry === null) {
 		return;
