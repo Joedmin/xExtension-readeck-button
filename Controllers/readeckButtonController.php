@@ -105,13 +105,59 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
         'url' => $entry->link(),
       );
 
-    // Errors are handled in the JS
     $result = $this->curlPostRequest('/bookmarks', $post_data);
+    if ($result['status'] == 202 && $this->shouldSendContent($entry, $behavior))
+    {
+      $this->updateBookmark($entry, $result['bookmarkId']);
+    }
+    // Errors are handled in the JS
     $result['response'] = array(
       'title' => $entry->title(),
       'bookmarkId' => $result['bookmarkId'] ?? null,
     );
     echo json_encode($result);
+  }
+
+  private function updateBookmark(FreshRSS_Entry $entry, string $bookmarkId): void
+  {
+    $feed = $entry->feed();
+    $patch_data = array(
+      'site_name' => $feed->name(),
+      'authors' => $entry->authors(),
+      'published' => $entry->machineReadableDate()
+    );
+    // Wait for bookmark to be loaded before attempting an update
+    $result = $this->checkBookmark($bookmarkId);
+    // Do not attempt to update if the previous check failed (probably due to auth error)
+    if ($result)
+    {
+      $this->curlPatchRequest(sprintf('/bookmarks/%s', $bookmarkId), $patch_data);
+    }
+  }
+
+  private function checkBookmark(string $bookmarkId): bool
+  {
+    $result = $this->curlGetRequest(sprintf('/bookmarks/%s', $bookmarkId));
+    if ($result['status'] != 200)
+    {
+      Minz_Log::error(
+        sprintf(
+          'Could not get bookmarkId %s, status was %s, response %s',
+          $bookmarkId,
+          $result['status'],
+          json_encode($result['response'])
+        )
+      );
+      return false;
+    }
+
+    if ($result['response']->loaded == false)
+    {
+      sleep(1);
+      return $this->checkBookmark($bookmarkId);
+    }
+
+    return true;
   }
 
   private function shouldSendContent(FreshRSS_Entry $entry, string $behavior): bool
@@ -232,6 +278,33 @@ class FreshExtension_readeckButton_Controller extends Minz_ActionController
     return array(
       'response' => json_decode($response_body),
       'bookmarkId' => $response_headers['bookmark-id'] ?? null,
+      'status' => curl_getinfo($curl, CURLINFO_HTTP_CODE),
+      'errorCode' => isset($response_headers['x-error-code'])
+        ? intval($response_headers['x-error-code'])
+        : curl_getinfo($curl, CURLINFO_HTTP_CODE)
+    );
+  }
+
+/**
+   * @param array<string,mixed> $patch_data
+   * @return array<string,mixed>
+   */
+  private function curlPatchRequest(string $endpoint, array $patch_data): array
+  {
+    $instance_url = FreshRSS_Context::userConf()->attributeString('readeck_instance_url');
+    $curl = $this->getCurlBase($instance_url . "/api" . $endpoint);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($patch_data));
+
+    $response = curl_exec($curl);
+
+    $header_size = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+    $response_header = substr($response, 0, $header_size);
+    $response_body = substr($response, $header_size);
+    $response_headers = $this->httpHeaderToArray($response_header);
+
+    return array(
       'status' => curl_getinfo($curl, CURLINFO_HTTP_CODE),
       'errorCode' => isset($response_headers['x-error-code'])
         ? intval($response_headers['x-error-code'])
